@@ -28,13 +28,13 @@
         android:id="@+id/legalAgeButton"/>
 
     <Button
+        android:id="@+id/underageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="I am under 18"
         android:textSize="30dp"
-        tools:layout_editor_absoluteX="89dp"
-        tools:layout_editor_absoluteY="633dp"
         tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        android:id="@+id/underageButton"/>
+        tools:layout_editor_absoluteX="89dp"
+        tools:layout_editor_absoluteY="633dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
