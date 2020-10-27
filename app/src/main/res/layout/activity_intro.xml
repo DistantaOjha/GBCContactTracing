@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntroActivity"
+    android:background="#F4511E">
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/login_logo"
+        tools:ignore="ContentDescription,MissingConstraints"
+        tools:layout_editor_absoluteX="125dp"
+        tools:layout_editor_absoluteY="76dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="G-COVIDWISE"
+        android:textAlignment="center"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="7dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="WELCOME TO G-COVIDWISE"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="259dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thank you for downloading G-COVIDWISE. G-COVIDWISE will help Gettysburg College Combat Covid-19 and keep the community safe."
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="299dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="How it works: Your device will exchange and receive Bluetooth tokens from other members of the community. These tokens are stored on your phone and cannot be accessed by anyone. Only if you test positive, the Health Authority may request you to user the release feature in the app to let them access these tokens for the purpose of contact tracing."
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="397dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Using G-COVIDWISE is completely voluntary."
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="606dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do Great Work"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="76dp"
+        tools:layout_editor_absoluteY="656dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
+        android:id="@+id/startAppButton"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

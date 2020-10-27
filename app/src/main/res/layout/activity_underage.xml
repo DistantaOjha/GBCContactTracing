@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UnderageActivity"
+    android:background="#F4511E">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thank you for your interest in keeping the Gettysburg College Community safe."
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="25dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="99dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="In accordance with Federal law, you are too young to participate on this app."
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="25dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="191dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Here's how you can help:"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="25dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
+        tools:layout_editor_absoluteX="68dp"
+        tools:layout_editor_absoluteY="328dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stay safe by social distancing, wearing masks, and washing hands frequently"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="25dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="480dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="If you selected your age incorrectly, use the back button"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="25dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="572dp"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textSize="27dp"
+        android:textColor="@color/colorPrimary"
+        android:background="#F4511E"
+        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
+        android:id="@+id/backButton"/>
+
+    <TextView
+        android:id="@+id/hyperlink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cdc_hyperlink"
+        android:textSize="30dp"
+        tools:ignore="MissingConstraints,SpUsage"
+        tools:layout_editor_absoluteX="107dp"
+        tools:layout_editor_absoluteY="393dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
