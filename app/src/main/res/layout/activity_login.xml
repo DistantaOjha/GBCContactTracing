@@ -35,6 +35,7 @@
         tools:ignore="HardcodedText,SpUsage" />
 
     <EditText
+        android:id="@+id/emailBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#ffffff"
