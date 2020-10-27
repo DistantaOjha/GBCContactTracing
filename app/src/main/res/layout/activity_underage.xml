@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".UnderageActivity"
     android:background="#F4511E">
 
@@ -13,9 +14,13 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="25dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="99dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.106"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="match_parent"
@@ -24,9 +29,13 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="25dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="191dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,9 +44,12 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="25dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        tools:layout_editor_absoluteX="68dp"
-        tools:layout_editor_absoluteY="328dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.447"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="match_parent"
@@ -46,9 +58,13 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="25dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="480dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.751"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="match_parent"
@@ -57,19 +73,29 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="25dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="572dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.893"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <Button
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
-        android:textSize="27dp"
-        android:textColor="@color/colorPrimary"
         android:background="#F4511E"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        android:id="@+id/backButton"/>
+        android:text="Back"
+        android:textColor="@color/colorPrimary"
+        android:textSize="27dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:id="@+id/hyperlink"
@@ -77,8 +103,10 @@
         android:layout_height="wrap_content"
         android:text="@string/cdc_hyperlink"
         android:textSize="30dp"
-        tools:ignore="MissingConstraints,SpUsage"
-        tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="393dp" />
+        tools:ignore="SpUsage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

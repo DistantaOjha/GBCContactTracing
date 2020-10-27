@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".IntroActivity"
     android:background="#F4511E">
 
@@ -10,20 +11,29 @@
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:src="@drawable/login_logo"
-        tools:ignore="ContentDescription,MissingConstraints"
-        tools:layout_editor_absoluteX="125dp"
-        tools:layout_editor_absoluteY="76dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.134"
+        tools:ignore="ContentDescription" />
 
     <TextView
+        android:id="@+id/introHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="G-COVIDWISE"
         android:textAlignment="center"
         android:textSize="40dp"
         android:textStyle="bold"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="7dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="match_parent"
@@ -31,9 +41,13 @@
         android:text="WELCOME TO G-COVIDWISE"
         android:textAlignment="center"
         android:textSize="30dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="259dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.361"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="match_parent"
@@ -42,9 +56,13 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="20dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="299dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.472"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="match_parent"
@@ -53,9 +71,13 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="20dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="397dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.736"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <TextView
         android:layout_width="match_parent"
@@ -64,18 +86,26 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="20dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="606dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.863"
+        tools:ignore="HardcodedText,SpUsage" />
 
     <Button
+        android:id="@+id/startAppButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Do Great Work"
         android:textSize="30dp"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="656dp"
-        tools:ignore="HardcodedText,MissingConstraints,SpUsage"
-        android:id="@+id/startAppButton"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.958"
+        tools:ignore="HardcodedText,SpUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
