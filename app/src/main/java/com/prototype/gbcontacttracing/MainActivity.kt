@@ -89,9 +89,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    val isLocationPermissionGranted
+    private val isLocationPermissionGranted
         get() = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-    fun Context.hasPermission(permissionType: String): Boolean {
+    private fun Context.hasPermission(permissionType: String): Boolean {
         return ContextCompat.checkSelfPermission(this, permissionType) ==
                 PackageManager.PERMISSION_GRANTED
     }
