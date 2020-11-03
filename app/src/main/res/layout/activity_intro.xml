@@ -7,17 +7,17 @@
     tools:context=".IntroActivity"
     android:background="#F4511E">
 
-    <!--<ImageView
+    <ImageView
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:src="@drawable/login_logo"
+        android:src="@drawable/info_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.134"
-        tools:ignore="ContentDescription" />-->
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/introHeader"
