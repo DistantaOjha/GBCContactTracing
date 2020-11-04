@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         runOnUiThread {
             val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setTitle("Locations Permission Required")
-            dialogBuilder.setMessage("Location Permission is required in order for this app to run and use Bluetooth Low Energy Services")
+            dialogBuilder.setMessage("Location Permission is required in order for this app to run and use Bluetooth Low Energy Services. The app will also BLE services in background.")
             dialogBuilder.setPositiveButton(
                 "Allow Location"
             ) { _: DialogInterface, _: Int ->
