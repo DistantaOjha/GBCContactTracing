@@ -17,7 +17,6 @@ class HomeFragment : Fragment() {
     private lateinit var inflatedView: View
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,8 +37,6 @@ class HomeFragment : Fragment() {
 
         return inflatedView
     }
-
-
 
 
 }

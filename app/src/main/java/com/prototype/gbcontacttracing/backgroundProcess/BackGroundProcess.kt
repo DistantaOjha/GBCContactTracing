@@ -15,13 +15,14 @@ class BackGroundProcess : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
 
+
     // Handler that receives messages from the thread
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
 
         override fun handleMessage(msg: Message) {
             //background work here
             try {
-
+                BleManager.initContext(baseContext)
                 BleManager.startBleScan()
                 BleManager.startAdvertising()
 
@@ -86,8 +87,7 @@ class BackGroundProcess : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy();
-        Log.d("hanuman", "service done")
+        super.onDestroy()
         Toast.makeText(this.baseContext, "service done", Toast.LENGTH_SHORT).show()
     }
 
