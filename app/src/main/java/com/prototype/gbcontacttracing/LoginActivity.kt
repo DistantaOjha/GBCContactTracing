@@ -15,15 +15,17 @@ import java.net.URLEncoder
 
 class LoginActivity : AppCompatActivity() {
 
+    private val code = getRandomString()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         loginVerifyButton.setOnClickListener{
             val email = emailBox.text.toString()
-            val code = getRandomString(5)
             val id = "196bcd9c-23c4-11eb-adc1-0242ac120002"
-            sendPostRequest(id, code, email)
-            val intent = Intent(this, IntroActivity::class.java)
+            sendPostRequest(id, this.code, email)
+            val intent = Intent(this, VerifyActivity::class.java)
+            intent.putExtra("Code", code)
             startActivity(intent)
         }
     }
@@ -58,9 +60,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun getRandomString(length: Int) : String {
+    private fun getRandomString() : String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        return (1..length)
+        return (1..5)
             .map { allowedChars.random() }
             .joinToString("")
     }
