@@ -1,11 +1,11 @@
 package com.prototype.gbcontacttracing
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Patterns
+import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_login.*
-import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -21,18 +21,24 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         loginVerifyButton.setOnClickListener{
-            val email = emailBox.text.toString()
-            val id = "196bcd9c-23c4-11eb-adc1-0242ac120002"
-            sendPostRequest(id, this.code, email)
-            val intent = Intent(this, VerifyActivity::class.java)
-            intent.putExtra("Code", code)
-            startActivity(intent)
+            if(validEmailAddress(emailBox)) {
+                val email = emailBox.text.toString()
+                sendPostRequest(this.code, email)
+                val intent = Intent(this, VerifyActivity::class.java)
+                intent.putExtra("Code", code)
+                startActivity(intent)
+            }
         }
     }
 
-    fun sendPostRequest(id:String, password:String, email:String) {
+    private fun validEmailAddress(emailBox: EditText?): Boolean {
+        val email = emailBox?.text.toString()
+        return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 
-        var reqParam = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8")
+    private fun sendPostRequest(password:String, email:String) {
+
+        var reqParam = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode("196bcd9c-23c4-11eb-adc1-0242ac120002", "UTF-8")
         reqParam += "&" + URLEncoder.encode("code", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8")
         reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
         val mURL = URL("http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php")

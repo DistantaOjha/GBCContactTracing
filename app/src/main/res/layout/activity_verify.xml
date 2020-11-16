@@ -22,6 +22,23 @@
         app:layout_constraintVertical_bias="0.556"
         tools:ignore="HardcodedText,SpUsage" />
 
+    <Button
+        android:id="@+id/backToLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.006"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="HardcodedText,SpUsage"
+        android:background="#F4511E"/>
+
     <EditText
         android:id="@+id/codeBox"
         android:layout_width="wrap_content"
