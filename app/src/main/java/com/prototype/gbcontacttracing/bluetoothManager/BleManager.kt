@@ -57,11 +57,13 @@ class BleManager {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 ScanResult.DATA_COMPLETE
 
-                val serviceData =
-                    result.scanRecord?.getServiceData(bleDataUUID)
+                val serviceData = result.device as String
+
                 if (serviceData != null) {
 
-                    val token = String(serviceData)
+                    val token = serviceData
+
+
                     val distanceInFeets = 10.0.pow((-69 - (result.rssi)) / (10.0 * 2)) * 3.28084
 
                     val time = System.currentTimeMillis()
@@ -94,24 +96,23 @@ class BleManager {
                             }
                         }
                     }
+                }
 
-                    //Clear the ones that have disappeared
-                    val removedTokens = mutableListOf<String>()
-                    for ((canToken, lastSeenTime) in lastTimeMap) {//candidate token
-                        val currentTime = System.currentTimeMillis()
-                        if (currentTime - lastSeenTime > DISAPPEAR_TIME) {
-                            Log.i("LOST DEVICE", canToken)
-                            initTimeMap.remove(canToken)
-                            distanceMap.remove(canToken)
-                            removedTokens.add(canToken)
-                        }
+                //Clear the ones that have disappeared
+                val removedTokens = mutableListOf<String>()
+                for ((canToken, lastSeenTime) in lastTimeMap) {//candidate token
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastSeenTime > DISAPPEAR_TIME) {
+                        Log.i("LOST DEVICE", canToken)
+                        initTimeMap.remove(canToken)
+                        distanceMap.remove(canToken)
+                        removedTokens.add(canToken)
                     }
+                }
 
-                    for (removedToken in removedTokens) {
-                        //remove from the lastTimeMap
-                        lastTimeMap.remove(removedToken)
-                    }
-
+                for (removedToken in removedTokens) {
+                    //remove from the lastTimeMap
+                    lastTimeMap.remove(removedToken)
                 }
             }
         }
@@ -158,10 +159,10 @@ class BleManager {
             val sendData = SEND_TOKEN.toByteArray(Charsets.UTF_8)
 
             val data = AdvertiseData.Builder()
-                .setIncludeDeviceName(false)
+                .setIncludeDeviceName(true)
                 .setIncludeTxPowerLevel(false)
                 .addServiceUuid(bleDataUUID)
-                .addServiceData(bleDataUUID, sendData)
+                // .addServiceData(bleDataUUID, sendData)
                 .build()
 
             val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
