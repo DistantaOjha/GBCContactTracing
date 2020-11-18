@@ -57,22 +57,20 @@ class BleManager {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 ScanResult.DATA_COMPLETE
 
-                val serviceData = result.device as String
+                val token = result.device as String
 
-                if (serviceData != null) {
-
-                    val token = serviceData
+                if (token != null) {
 
 
-                    val distanceInFeets = 10.0.pow((-69 - (result.rssi)) / (10.0 * 2)) * 3.28084
+                    val distanceInFeet = 10.0.pow((-69 - (result.rssi)) / (10.0 * 2)) * 3.28084
 
                     val time = System.currentTimeMillis()
                     if (!initTimeMap.containsKey(token)) {
                         initTimeMap[token] = time
-                        distanceMap[token] = mutableListOf(distanceInFeets)
+                        distanceMap[token] = mutableListOf(distanceInFeet)
                     } else {
                         lastTimeMap[token] = time
-                        (distanceMap[token] as MutableList<Double>?)?.add(distanceInFeets)
+                        (distanceMap[token] as MutableList<Double>?)?.add(distanceInFeet)
                     }
 
 
@@ -150,6 +148,10 @@ class BleManager {
         }
 
         fun startAdvertising() {
+
+            bluetoothAdapter.name = SEND_TOKEN
+
+
             val settings = AdvertiseSettings.Builder()
                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
                 .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
