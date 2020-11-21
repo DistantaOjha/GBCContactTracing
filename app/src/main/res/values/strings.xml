@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">GBContactTracing</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="enable_bluetooth"> Enable Bluetooth</string>
+    <string name="cdc_hyperlink"> <a href="www.cdc.gov">CDC Website</a></string>
 </resources>
