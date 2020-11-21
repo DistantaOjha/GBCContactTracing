@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_age.*
+import kotlinx.android.synthetic.main.activity_underage.*
 import kotlinx.android.synthetic.main.activity_verify.*
 
 class VerifyActivity : AppCompatActivity() {
@@ -13,20 +14,13 @@ class VerifyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_verify)
 
         submitButton.setOnClickListener{
-            if(verification(codeBox.text.toString())){
-                val intent = Intent(this, IntroActivity::class.java)
-                startActivity(intent)
-            }
-            else {
-                Toast.makeText(this, "Invalid Code, Try Again!", Toast.LENGTH_LONG).show()
-            }
+            val intent = Intent(this, IntroActivity::class.java)
+            startActivity(intent)
         }
-    }
 
-    private fun verification(input:String) : Boolean {
-        if(input == intent.getStringExtra("Code").toString()){
-            return true
+        backToLoginButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
-        return false
     }
 }
