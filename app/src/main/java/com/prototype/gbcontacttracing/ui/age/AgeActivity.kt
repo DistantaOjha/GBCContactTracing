@@ -1,8 +1,10 @@
-package com.prototype.gbcontacttracing
+package com.prototype.gbcontacttracing.ui.age
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.prototype.gbcontacttracing.R
+import com.prototype.gbcontacttracing.ui.emailVerification.LoginActivity
 import kotlinx.android.synthetic.main.activity_age.*
 
 class AgeActivity : AppCompatActivity() {
@@ -17,7 +19,7 @@ class AgeActivity : AppCompatActivity() {
         }
 
         legalAgeButton.setOnClickListener{
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent)
         }
     }

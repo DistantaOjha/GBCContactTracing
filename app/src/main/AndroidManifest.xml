@@ -11,13 +11,21 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity android:name=".ui.age.AgeActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.emailVerification.VerifyActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.emailVerification.LoginActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.age.IntroActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.age.UnderageActivity" android:screenOrientation="portrait"/>
         <service
             android:name=".backgroundProcess.BackGroundProcess"
             android:foregroundServiceType="connectedDevice"

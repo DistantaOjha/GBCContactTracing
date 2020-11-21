@@ -12,12 +12,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.fragment.app.Fragment
 import com.prototype.gbcontacttracing.bluetoothManager.BleManager
+import com.prototype.gbcontacttracing.ui.*
+import com.prototype.gbcontacttracing.ui.age.AgeActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 private const val ENABLE_BLUETOOTH_REQUEST_CODE = 1
 private const val LOCATION_PERMISSION_REQUEST_CODE = 2
@@ -94,19 +93,39 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
         BleManager.setBluetooth(this)
         bluetoothAdapter = BleManager.getBleAdapter()
+
+        val sharedPref = getSharedPreferences("GBContactTracing", MODE_PRIVATE);
+        val userId: String? = sharedPref.getString("user_id", "Null")
+
+        if(userId.equals("Null")){
+            val intent = Intent(this, AgeActivity::class.java)
+            startActivity(intent)
+        }
+        else {
+            val homeFragment = HomeFragment()
+            val releaseFragment = ReleaseFragment()
+            val infoFragment = InfoFragment()
+
+            makeCurrentFragment(homeFragment)
+
+            nav_view.setOnNavigationItemSelectedListener {
+                when(it.itemId){
+                    R.id.navigation_home -> makeCurrentFragment(homeFragment)
+                    R.id.navigation_release -> makeCurrentFragment(releaseFragment)
+                    R.id.navigation_info -> makeCurrentFragment(infoFragment)
+                }
+                true
+            }
+        }
     }
+
+    private fun makeCurrentFragment(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.nav_host_fragment, fragment)
+        transaction.commit()
+    }
+
 }

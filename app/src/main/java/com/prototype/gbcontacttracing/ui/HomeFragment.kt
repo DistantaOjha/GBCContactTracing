@@ -1,4 +1,4 @@
-package com.prototype.gbcontacttracing.ui.home
+package com.prototype.gbcontacttracing.ui
 
 import android.content.Intent
 import android.os.Bundle

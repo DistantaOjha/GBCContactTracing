@@ -1,10 +1,10 @@
-package com.prototype.gbcontacttracing
+package com.prototype.gbcontacttracing.ui.age
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.widget.TextView
+import com.prototype.gbcontacttracing.R
 import kotlinx.android.synthetic.main.activity_underage.*
 
 class UnderageActivity : AppCompatActivity() {

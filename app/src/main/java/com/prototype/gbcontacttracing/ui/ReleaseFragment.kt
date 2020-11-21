@@ -1,4 +1,4 @@
-package com.prototype.gbcontacttracing.ui.release
+package com.prototype.gbcontacttracing.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
