@@ -11,16 +11,18 @@
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:text="Verify"
         android:textAlignment="center"
-        android:textSize="30dp"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.556"
-        tools:ignore="HardcodedText,SpUsage" />
+        android:background="@drawable/custom_button"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/backToLoginButton"
@@ -28,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="Back"
         android:textAlignment="center"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:ignore="HardcodedText,SpUsage"
+        tools:ignore="HardcodedText"
         android:background="#F4511E"/>
 
     <EditText
@@ -47,12 +49,12 @@
         android:hint="Enter Verification Code:"
         android:importantForAutofill="no"
         android:inputType= "text"
-        android:textSize="30dp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.457"
-        tools:ignore="HardcodedText,SpUsage" />
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
