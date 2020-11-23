@@ -1,0 +1,122 @@
+Index: app/src/main/java/com/prototype/gbcontacttracing/VerifyActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.prototype.gbcontacttracing\r\n\r\nimport android.content.Intent\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport android.widget.Toast\r\nimport kotlinx.android.synthetic.main.activity_age.*\r\nimport kotlinx.android.synthetic.main.activity_verify.*\r\n\r\nclass VerifyActivity : AppCompatActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_verify)\r\n\r\n        submitButton.setOnClickListener{\r\n            if(verification(codeBox.text.toString())){\r\n                val intent = Intent(this, IntroActivity::class.java)\r\n                startActivity(intent)\r\n            }\r\n            else {\r\n                Toast.makeText(this, \"Invalid Code, Try Again!\", Toast.LENGTH_LONG).show()\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun verification(input:String) : Boolean {\r\n        if(input == intent.getStringExtra(\"Code\").toString()){\r\n            return true\r\n        }\r\n        return false\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/prototype/gbcontacttracing/VerifyActivity.kt	(revision 95870e0aa5147db0900b4f31d71b679421dcbb6e)
++++ app/src/main/java/com/prototype/gbcontacttracing/VerifyActivity.kt	(date 1605581999388)
+@@ -17,16 +17,16 @@
+                 val intent = Intent(this, IntroActivity::class.java)
+                 startActivity(intent)
+             }
+-            else {
+-                Toast.makeText(this, "Invalid Code, Try Again!", Toast.LENGTH_LONG).show()
+-            }
++//            else {
++//                Toast.makeText(this, "Invalid Code, Try Again!", Toast.LENGTH_LONG).show()
++//            }
+         }
+     }
+ 
+     private fun verification(input:String) : Boolean {
+-        if(input == intent.getStringExtra("Code").toString()){
+-            return true
+-        }
+-        return false
++//        if(input == intent.getStringExtra("Code").toString()){
++//            return true
++//        }
++        return true
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/prototype/gbcontacttracing/LoginActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.prototype.gbcontacttracing\r\n\r\nimport android.content.Intent\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport android.util.Patterns\r\nimport android.widget.EditText\r\nimport kotlinx.android.synthetic.main.activity_login.*\r\nimport java.io.BufferedReader\r\nimport java.io.InputStreamReader\r\nimport java.io.OutputStreamWriter\r\nimport java.net.HttpURLConnection\r\nimport java.net.URL\r\nimport java.net.URLEncoder\r\n\r\nclass LoginActivity : AppCompatActivity() {\r\n\r\n    private val code = getRandomString()\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_login)\r\n        loginVerifyButton.setOnClickListener{\r\n            if(validEmailAddress(emailBox)) {\r\n                val email = emailBox.text.toString()\r\n                sendPostRequest(this.code, email)\r\n                val intent = Intent(this, VerifyActivity::class.java)\r\n                intent.putExtra(\"Code\", code)\r\n                startActivity(intent)\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun validEmailAddress(emailBox: EditText?): Boolean {\r\n        val email = emailBox?.text.toString()\r\n        return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()\r\n    }\r\n\r\n    private fun sendPostRequest(password:String, email:String) {\r\n\r\n        var reqParam = URLEncoder.encode(\"id\", \"UTF-8\") + \"=\" + URLEncoder.encode(\"196bcd9c-23c4-11eb-adc1-0242ac120002\", \"UTF-8\")\r\n        reqParam += \"&\" + URLEncoder.encode(\"code\", \"UTF-8\") + \"=\" + URLEncoder.encode(password, \"UTF-8\")\r\n        reqParam += \"&\" + URLEncoder.encode(\"email\", \"UTF-8\") + \"=\" + URLEncoder.encode(email, \"UTF-8\")\r\n        val mURL = URL(\"http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php\")\r\n\r\n        with(mURL.openConnection() as HttpURLConnection) {\r\n            requestMethod = \"POST\"\r\n\r\n            val wr = OutputStreamWriter(outputStream)\r\n            wr.write(reqParam)\r\n            wr.flush()\r\n\r\n            println(\"URL : $url\")\r\n            println(\"Response Code : $responseCode\")\r\n\r\n            BufferedReader(InputStreamReader(inputStream)).use {\r\n                val response = StringBuffer()\r\n\r\n                var inputLine = it.readLine()\r\n                while (inputLine != null) {\r\n                    response.append(inputLine)\r\n                    inputLine = it.readLine()\r\n                }\r\n                println(\"Response : $response\")\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun getRandomString() : String {\r\n        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')\r\n        return (1..5)\r\n            .map { allowedChars.random() }\r\n            .joinToString(\"\")\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/prototype/gbcontacttracing/LoginActivity.kt	(revision 95870e0aa5147db0900b4f31d71b679421dcbb6e)
++++ app/src/main/java/com/prototype/gbcontacttracing/LoginActivity.kt	(date 1605581816496)
+@@ -22,10 +22,10 @@
+         setContentView(R.layout.activity_login)
+         loginVerifyButton.setOnClickListener{
+             if(validEmailAddress(emailBox)) {
+-                val email = emailBox.text.toString()
+-                sendPostRequest(this.code, email)
++//                val email = emailBox.text.toString()
++//                sendPostRequest(this.code, email)
+                 val intent = Intent(this, VerifyActivity::class.java)
+-                intent.putExtra("Code", code)
++//                intent.putExtra("Code", code)
+                 startActivity(intent)
+             }
+         }
+@@ -36,35 +36,35 @@
+         return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+     }
+ 
+-    private fun sendPostRequest(password:String, email:String) {
+-
+-        var reqParam = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode("196bcd9c-23c4-11eb-adc1-0242ac120002", "UTF-8")
+-        reqParam += "&" + URLEncoder.encode("code", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8")
+-        reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
+-        val mURL = URL("http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php")
+-
+-        with(mURL.openConnection() as HttpURLConnection) {
+-            requestMethod = "POST"
+-
+-            val wr = OutputStreamWriter(outputStream)
+-            wr.write(reqParam)
+-            wr.flush()
+-
+-            println("URL : $url")
+-            println("Response Code : $responseCode")
+-
+-            BufferedReader(InputStreamReader(inputStream)).use {
+-                val response = StringBuffer()
+-
+-                var inputLine = it.readLine()
+-                while (inputLine != null) {
+-                    response.append(inputLine)
+-                    inputLine = it.readLine()
+-                }
+-                println("Response : $response")
+-            }
+-        }
+-    }
++//    private fun sendPostRequest(password:String, email:String) {
++//
++//        var reqParam = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode("196bcd9c-23c4-11eb-adc1-0242ac120002", "UTF-8")
++//        reqParam += "&" + URLEncoder.encode("code", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8")
++//        reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
++//        val mURL = URL("http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php")
++//
++//        with(mURL.openConnection() as HttpURLConnection) {
++//            requestMethod = "POST"
++//
++//            val wr = OutputStreamWriter(outputStream)
++//            wr.write(reqParam)
++//            wr.flush()
++//
++//            println("URL : $url")
++//            println("Response Code : $responseCode")
++//
++//            BufferedReader(InputStreamReader(inputStream)).use {
++//                val response = StringBuffer()
++//
++//                var inputLine = it.readLine()
++//                while (inputLine != null) {
++//                    response.append(inputLine)
++//                    inputLine = it.readLine()
++//                }
++//                println("Response : $response")
++//            }
++//        }
++//    }
+ 
+     private fun getRandomString() : String {
+         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')

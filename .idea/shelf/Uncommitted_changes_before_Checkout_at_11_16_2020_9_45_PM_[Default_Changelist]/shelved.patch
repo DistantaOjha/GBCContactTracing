@@ -1,0 +1,65 @@
+Index: app/src/main/java/com/prototype/gbcontacttracing/bluetoothManager/BleManager.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.prototype.gbcontacttracing.bluetoothManager\r\n\r\nimport android.app.Activity\r\nimport android.bluetooth.BluetoothAdapter\r\nimport android.bluetooth.BluetoothManager\r\nimport android.bluetooth.le.*\r\nimport android.content.Context\r\nimport android.os.ParcelUuid\r\nimport android.util.Log\r\nimport com.prototype.gbcontacttracing.databaseManager.DataBaseManager\r\nimport java.util.*\r\nimport kotlin.math.pow\r\n\r\n\r\nclass BleManager {\r\n\r\n    companion object {\r\n\r\n        private const val SEND_TOKEN = \"haider\"\r\n\r\n        private lateinit var baseContext: Context\r\n        private lateinit var bluetoothManager: BluetoothManager\r\n        private lateinit var bluetoothAdapter: BluetoothAdapter\r\n        private lateinit var bleScanner: BluetoothLeScanner\r\n        private lateinit var bleAdvertiser: BluetoothLeAdvertiser\r\n        private lateinit var db: DataBaseManager\r\n        private var isScanning = false\r\n\r\n\r\n        // Keeps track of when the device was first seen\r\n        private val initTimeMap = mutableMapOf<String, Long>()\r\n\r\n        //keeps track of when the device was last seen //keeps update for every new seen\r\n        private val lastTimeMap = mutableMapOf<String, Long>()\r\n\r\n        //keeps track of distances obtained from the subsequent scans\r\n        private val distanceMap = mutableMapOf<String, List<Double>>()\r\n\r\n        // KEEP MIN_EXPOSURE_TIME < DISAPPEAR TIME\r\n        // difference between last seen time and first seen map to get into the database\r\n        private const val MIN_EXPOSURE_TIME = 15000 //in milliseconds\r\n\r\n        //difference between current time and last seen time for the device to be not in the periphery\r\n        private const val DISAPPEAR_TIME = 20000 //in milliseconds\r\n\r\n        // avg. distance to be considered the exposure\r\n        private const val MIN_EXPOSURE_DISTANCE = 6 //in feet\r\n\r\n        private val bleDataUUID =\r\n            ParcelUuid(UUID.fromString(\"00001234-0000-1000-8000-00805F9B34FB\"))\r\n\r\n        private val scanSettings = ScanSettings.Builder()\r\n            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)\r\n            .build()\r\n\r\n        private val scanCallback = object : ScanCallback() {\r\n            override fun onScanResult(callbackType: Int, result: ScanResult) {\r\n                ScanResult.DATA_COMPLETE\r\n\r\n                val serviceData =\r\n                    result.scanRecord?.getServiceData(bleDataUUID)\r\n                if (serviceData != null) {\r\n\r\n                    val token = String(serviceData)\r\n                    val distanceInFeets = 10.0.pow((-69 - (result.rssi)) / (10.0 * 2)) * 3.28084\r\n\r\n                    val time = System.currentTimeMillis()\r\n                    if (!initTimeMap.containsKey(token)) {\r\n                        initTimeMap[token] = time\r\n                        distanceMap[token] = mutableListOf(distanceInFeets)\r\n                    } else {\r\n                        lastTimeMap[token] = time\r\n                        (distanceMap[token] as MutableList<Double>?)?.add(distanceInFeets)\r\n                    }\r\n\r\n\r\n                    if (initTimeMap.containsKey(token) && lastTimeMap.containsKey(token)) {\r\n                        val exposureTime =\r\n                            initTimeMap[token]?.let { lastTimeMap[token]?.minus(it) }\r\n\r\n                        val averageDistance = distanceMap[token]?.average()\r\n\r\n                        if (exposureTime != null && averageDistance != null) {\r\n                            if (exposureTime > MIN_EXPOSURE_TIME && averageDistance < MIN_EXPOSURE_DISTANCE) {\r\n                                initTimeMap[token]?.let {\r\n                                    lastTimeMap[token]?.let { it1 ->\r\n                                        db.insertData(\r\n                                            token,\r\n                                            it,\r\n                                            it1, averageDistance\r\n                                        )\r\n                                    }\r\n                                }\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                    //Clear the ones that have disappeared\r\n                    val removedTokens = mutableListOf<String>()\r\n                    for ((canToken, lastSeenTime) in lastTimeMap) {//candidate token\r\n                        val currentTime = System.currentTimeMillis()\r\n                        if (currentTime - lastSeenTime > DISAPPEAR_TIME) {\r\n                            Log.i(\"LOST DEVICE\", canToken)\r\n                            initTimeMap.remove(canToken)\r\n                            distanceMap.remove(canToken)\r\n                            removedTokens.add(canToken)\r\n                        }\r\n                    }\r\n\r\n                    for (removedToken in removedTokens) {\r\n                        //remove from the lastTimeMap\r\n                        lastTimeMap.remove(removedToken)\r\n                    }\r\n\r\n                }\r\n            }\r\n        }\r\n\r\n        private val scanFilter = ScanFilter.Builder()\r\n            .setServiceUuid(bleDataUUID)\r\n            .build()\r\n\r\n        fun setBluetooth(activity: Activity) {\r\n            bluetoothManager =\r\n                activity.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager\r\n            bluetoothAdapter = bluetoothManager.adapter\r\n            this.bleScanner = bluetoothAdapter.bluetoothLeScanner\r\n            bleAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser\r\n        }\r\n\r\n        fun startBleScan() {\r\n            db = DataBaseManager(baseContext)\r\n            db.setupTable()\r\n            bleScanner.startScan(mutableListOf<ScanFilter>(scanFilter), scanSettings, scanCallback)\r\n            isScanning = true\r\n        }\r\n\r\n        fun stopBleScan(scanCallback: ScanCallback) {\r\n            bleScanner.stopScan(scanCallback)\r\n            isScanning = false\r\n        }\r\n\r\n        fun getBleScanner(): BluetoothLeScanner {\r\n            return bleScanner\r\n        }\r\n\r\n        fun getBleAdapter(): BluetoothAdapter {\r\n            return bluetoothAdapter\r\n        }\r\n\r\n        fun startAdvertising() {\r\n            val settings = AdvertiseSettings.Builder()\r\n                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)\r\n                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)\r\n                .setConnectable(false)\r\n                .build()\r\n\r\n            val sendData = SEND_TOKEN.toByteArray(Charsets.UTF_8)\r\n\r\n            val data = AdvertiseData.Builder()\r\n                .setIncludeDeviceName(false)\r\n                .setIncludeTxPowerLevel(false)\r\n                .addServiceUuid(bleDataUUID)\r\n                .addServiceData(bleDataUUID, sendData)\r\n                .build()\r\n\r\n            val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {\r\n                override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {\r\n                    super.onStartSuccess(settingsInEffect)\r\n                    Log.i(\"BLE\", \"LE Advertise success.\")\r\n                }\r\n\r\n                override fun onStartFailure(errorCode: Int) {\r\n                    Log.e(\"BLE\", \"Advertising onStartFailure: $errorCode\")\r\n                    super.onStartFailure(errorCode)\r\n                }\r\n            }\r\n            bleAdvertiser.startAdvertising(settings, data, advertisingCallback)\r\n        }\r\n\r\n        fun initContext(baseContext: Context?) {\r\n            if (baseContext != null) {\r\n                this.baseContext = baseContext\r\n            }\r\n        }\r\n\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/prototype/gbcontacttracing/bluetoothManager/BleManager.kt	(revision 85b28bdd70d2e72578bf73d86c127668dfb2da51)
++++ app/src/main/java/com/prototype/gbcontacttracing/bluetoothManager/BleManager.kt	(date 1605580371660)
+@@ -57,11 +57,12 @@
+             override fun onScanResult(callbackType: Int, result: ScanResult) {
+                 ScanResult.DATA_COMPLETE
+ 
+-                val serviceData =
+-                    result.scanRecord?.getServiceData(bleDataUUID)
++//                val serviceData =
++//                    result.scanRecord?.getServiceData(bleDataUUID)
++                val serviceData = result.device.name as String
+                 if (serviceData != null) {
+ 
+-                    val token = String(serviceData)
++                    val token = serviceData
+                     val distanceInFeets = 10.0.pow((-69 - (result.rssi)) / (10.0 * 2)) * 3.28084
+ 
+                     val time = System.currentTimeMillis()
+@@ -149,19 +150,22 @@
+         }
+ 
+         fun startAdvertising() {
++
++            bluetoothAdapter.name = SEND_TOKEN
++
+             val settings = AdvertiseSettings.Builder()
+                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
+-                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
++                //.setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+                 .setConnectable(false)
+                 .build()
+ 
+             val sendData = SEND_TOKEN.toByteArray(Charsets.UTF_8)
+ 
+             val data = AdvertiseData.Builder()
+-                .setIncludeDeviceName(false)
++                .setIncludeDeviceName(true)
+                 .setIncludeTxPowerLevel(false)
+                 .addServiceUuid(bleDataUUID)
+-                .addServiceData(bleDataUUID, sendData)
++                //.addServiceData(bleDataUUID, sendData)
+                 .build()
+ 
+             val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
+Index: app/src/main/java/com/prototype/gbcontacttracing/databaseManager/Contact.kt
+===================================================================
+--- app/src/main/java/com/prototype/gbcontacttracing/databaseManager/Contact.kt	(revision 85b28bdd70d2e72578bf73d86c127668dfb2da51)
++++ app/src/main/java/com/prototype/gbcontacttracing/databaseManager/Contact.kt	(revision 85b28bdd70d2e72578bf73d86c127668dfb2da51)
+@@ -1,8 +0,0 @@
+-package com.prototype.gbcontacttracing.databaseManager
+-
+-class Contact {
+-
+-
+-
+-
+-}
+\ No newline at end of file
