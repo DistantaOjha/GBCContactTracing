@@ -89,21 +89,28 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     fun readAllData(): String {
         val dbRead = this.readableDatabase
         val inspectQuery = "SELECT * FROM Contacts"
-        val result =  StringBuilder()
+        val result =  StringBuilder("<table>")
         val queryResult = dbRead.rawQuery(inspectQuery, null)
+        result.append("<tr>")
+        result.append("<th>$COL_id</th>")
+        result.append("<th>$COL_startTime</th>")
+        result.append("<th>$COL_endTime</th>")
+        result.append("<th>$COL_avgDistance</th>")
+
+        result.append("</tr>")
+
         if (queryResult.moveToFirst()) {
             do {
-                result.append(
-                            queryResult.getString(0) + ", "
-                            + queryResult.getString(1) + ", "
-                            + queryResult.getString(2) + ", "
-                            + queryResult.getString(3)
-                )
-
-                result.append("</br>")
+                result.append("<tr>")
+                result.append("<td>${queryResult.getString(0)}</td>")
+                result.append("<td>${queryResult.getString(1)}</td>")
+                result.append("<td>${queryResult.getString(2)}</td>")
+                result.append("<td>${queryResult.getString(3)}</td>")
+                result.append("</tr>")
 
             } while (queryResult.moveToNext())
         }
+        result.append("</table>")
         return result.toString()
 
     }

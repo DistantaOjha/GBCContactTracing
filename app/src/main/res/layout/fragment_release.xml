@@ -65,6 +65,7 @@
     <RadioGroup
         android:layout_width="146dp"
         android:layout_height="131dp"
+        android:id="@+id/radioGroup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -73,7 +74,7 @@
         app:layout_constraintVertical_bias="0.226">
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/radioYes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Yes"
@@ -81,7 +82,7 @@
             tools:ignore="HardcodedText" />
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/radioNo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="No"
