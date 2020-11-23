@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import androidx.core.database.getStringOrNull
 
 const val DATABASE_NAME = "TracedContacts"
 const val TABLE_NAME = "Contacts"
@@ -38,7 +37,7 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
         val existQuery =
             "SELECT $COL_id FROM $TABLE_NAME WHERE $COL_id = '$id' AND $COL_startTime = '$startTime'"
-        val existQueryRes = dbRead.rawQuery(existQuery, null);
+        val existQueryRes = dbRead.rawQuery(existQuery, null)
 
         if (existQueryRes.count > 0) {
             //update
@@ -62,7 +61,7 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         }
 
         val inspectQuery = "SELECT * FROM Contacts"
-        val queryResult = dbRead.rawQuery(inspectQuery, null);
+        val queryResult = dbRead.rawQuery(inspectQuery, null)
         if (queryResult.moveToFirst()) {
             do {
                 Log.i(

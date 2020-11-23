@@ -3,7 +3,6 @@ package com.prototype.gbcontacttracing.backgroundProcess
 import android.app.*
 import android.content.Intent
 import android.os.*
-import android.util.Log
 import android.widget.Toast
 import com.prototype.gbcontacttracing.MainActivity
 import com.prototype.gbcontacttracing.bluetoothManager.BleManager
@@ -15,6 +14,10 @@ class BackGroundProcess : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
 
+    companion object {
+        @JvmField
+        var isAppInForeground: Boolean = false
+    }
 
     // Handler that receives messages from the thread
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
@@ -30,11 +33,6 @@ class BackGroundProcess : Service() {
                 // Restore interrupt status.
                 Thread.currentThread().interrupt()
             }
-
-            // Stop the service using the startId, so that we don't stop
-            // the service in the middle of handling another job
-            //Thread.sleep(15000)
-            //stopSelf(msg.arg1)
         }
     }
 
@@ -54,6 +52,7 @@ class BackGroundProcess : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
+        isAppInForeground = true
         createNotificationChannel()
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
@@ -88,7 +87,10 @@ class BackGroundProcess : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Toast.makeText(this.baseContext, "service done", Toast.LENGTH_SHORT).show()
+        BleManager.stopBleScan()
+        BleManager.stopBleAdvertise()
+        Toast.makeText(this.baseContext, "Contact Tracing Service Ended", Toast.LENGTH_SHORT).show()
+        isAppInForeground = false
     }
 
 

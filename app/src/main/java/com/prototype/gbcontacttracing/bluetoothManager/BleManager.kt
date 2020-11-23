@@ -7,6 +7,7 @@ import android.bluetooth.le.*
 import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.prototype.gbcontacttracing.databaseManager.DataBaseManager
 import java.util.*
 import kotlin.math.pow
@@ -15,8 +16,6 @@ import kotlin.math.pow
 class BleManager {
 
     companion object {
-
-        private const val SEND_TOKEN = "haider"
 
         private lateinit var baseContext: Context
         private lateinit var bluetoothManager: BluetoothManager
@@ -57,7 +56,7 @@ class BleManager {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 ScanResult.DATA_COMPLETE
 
-                val token = result.device as String
+                val token = result.device.name
 
                 if (token != null) {
 
@@ -119,6 +118,18 @@ class BleManager {
             .setServiceUuid(bleDataUUID)
             .build()
 
+        private val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
+            override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
+                super.onStartSuccess(settingsInEffect)
+                Log.i("BLE", "LE Advertise success.")
+            }
+
+            override fun onStartFailure(errorCode: Int) {
+                Log.e("BLE", "Advertising onStartFailure: $errorCode")
+                super.onStartFailure(errorCode)
+            }
+        }
+
         fun setBluetooth(activity: Activity) {
             bluetoothManager =
                 activity.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -134,51 +145,47 @@ class BleManager {
             isScanning = true
         }
 
-        fun stopBleScan(scanCallback: ScanCallback) {
+        fun stopBleScan() {
             bleScanner.stopScan(scanCallback)
             isScanning = false
         }
 
-        fun getBleScanner(): BluetoothLeScanner {
-            return bleScanner
+        fun stopBleAdvertise() {
+            bleAdvertiser.stopAdvertising(advertisingCallback)
         }
 
         fun getBleAdapter(): BluetoothAdapter {
             return bluetoothAdapter
         }
 
+
         fun startAdvertising() {
 
-            bluetoothAdapter.name = SEND_TOKEN
+            val sendTOKEN =
+                baseContext.getSharedPreferences("GBContactTracing", AppCompatActivity.MODE_PRIVATE)
+                    .getString("user_id", "UNNAMED")
+
+            if (sendTOKEN.equals("UNNAMED")) {
+                Log.e("Error Advertising Data", "Bluetooth adapter not named")
+            } else {
+                bluetoothAdapter.name = sendTOKEN
+                val settings = AdvertiseSettings.Builder()
+                    .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
+                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+                    .setConnectable(false)
+                    .build()
+
+                val data = AdvertiseData.Builder()
+                    .setIncludeDeviceName(true)
+                    .setIncludeTxPowerLevel(false)
+                    .addServiceUuid(bleDataUUID)
+                    .build()
 
 
-            val settings = AdvertiseSettings.Builder()
-                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
-                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-                .setConnectable(false)
-                .build()
-
-            val sendData = SEND_TOKEN.toByteArray(Charsets.UTF_8)
-
-            val data = AdvertiseData.Builder()
-                .setIncludeDeviceName(true)
-                .setIncludeTxPowerLevel(false)
-                .addServiceUuid(bleDataUUID)
-                // .addServiceData(bleDataUUID, sendData)
-                .build()
-
-            val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
-                override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
-                    super.onStartSuccess(settingsInEffect)
-                    Log.i("BLE", "LE Advertise success.")
-                }
-
-                override fun onStartFailure(errorCode: Int) {
-                    Log.e("BLE", "Advertising onStartFailure: $errorCode")
-                    super.onStartFailure(errorCode)
-                }
+                bleAdvertiser.startAdvertising(settings, data, advertisingCallback)
             }
-            bleAdvertiser.startAdvertising(settings, data, advertisingCallback)
+
+
         }
 
         fun initContext(baseContext: Context?) {

@@ -2,4 +2,6 @@
     <string name="app_name">GBContactTracing</string>
     <string name="enable_bluetooth"> Enable Bluetooth</string>
     <string name="cdc_hyperlink"> <a href="www.cdc.gov">CDC Website</a></string>
+    <string name="startService"> Start Service </string>
+    <string name="stopService"> Stop Service </string>
 </resources>

@@ -14,7 +14,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.prototype.gbcontacttracing.bluetoothManager.BleManager
-import com.prototype.gbcontacttracing.ui.*
+import com.prototype.gbcontacttracing.ui.HomeFragment
+import com.prototype.gbcontacttracing.ui.InfoFragment
+import com.prototype.gbcontacttracing.ui.ReleaseFragment
 import com.prototype.gbcontacttracing.ui.age.AgeActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -97,14 +99,13 @@ class MainActivity : AppCompatActivity() {
         BleManager.setBluetooth(this)
         bluetoothAdapter = BleManager.getBleAdapter()
 
-        val sharedPref = getSharedPreferences("GBContactTracing", MODE_PRIVATE);
+        val sharedPref = getSharedPreferences("GBContactTracing", MODE_PRIVATE)
         val userId: String? = sharedPref.getString("user_id", "Null")
 
-        if(userId.equals("Null")){
+        if (userId.equals("Null")) {
             val intent = Intent(this, AgeActivity::class.java)
             startActivity(intent)
-        }
-        else {
+        } else {
             val homeFragment = HomeFragment()
             val releaseFragment = ReleaseFragment()
             val infoFragment = InfoFragment()
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity() {
             makeCurrentFragment(homeFragment)
 
             nav_view.setOnNavigationItemSelectedListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.navigation_home -> makeCurrentFragment(homeFragment)
                     R.id.navigation_release -> makeCurrentFragment(releaseFragment)
                     R.id.navigation_info -> makeCurrentFragment(infoFragment)
@@ -122,7 +123,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeCurrentFragment(fragment: Fragment){
+    private fun makeCurrentFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.nav_host_fragment, fragment)
         transaction.commit()
