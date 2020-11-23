@@ -1,3 +1,3 @@
 # GBCContactTracing
 
-This is Gettysburg College Contact Tracing App for CS440 Fall 2020
+This is Protoype Gettysburg College Contact Tracing App for CS440 Fall 2020
