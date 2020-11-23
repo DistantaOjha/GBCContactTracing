@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.prototype.gbcontacttracing.R
+import com.prototype.gbcontacttracing.bluetoothManager.BleManager
+import com.prototype.gbcontacttracing.databaseManager.DataBaseManager
 
 class ReleaseFragment : Fragment() {
 
@@ -20,15 +22,14 @@ class ReleaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val inflatedView = inflater.inflate(R.layout.fragment_release, container, false)
-
         val submitButton = inflatedView.findViewById(R.id.releaseButton) as Button
 
-
+        val db = context?.let { DataBaseManager(it) }
+        db?.setupTable()
 
         submitButton.setOnClickListener {
 
-
-            val data = "hanuman, 2, 3 </br> loluman, 5, 6, </br> panuman, 7, 8"
+            val data = db?.readAllData()
             val user =
                 context?.getSharedPreferences("GBContactTracing", AppCompatActivity.MODE_PRIVATE)
                     ?.getString("user_id", "UNNAMED")

@@ -111,7 +111,11 @@ class BleManager {
                     //remove from the lastTimeMap
                     lastTimeMap.remove(removedToken)
                 }
+
+
+                db.deleteOldData(System.currentTimeMillis());
             }
+
         }
 
         private val scanFilter = ScanFilter.Builder()
@@ -180,7 +184,6 @@ class BleManager {
                     .setIncludeTxPowerLevel(false)
                     .addServiceUuid(bleDataUUID)
                     .build()
-
 
                 bleAdvertiser.startAdvertising(settings, data, advertisingCallback)
             }

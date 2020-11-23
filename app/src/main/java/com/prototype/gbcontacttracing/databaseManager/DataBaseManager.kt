@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import java.lang.StringBuilder
 
 const val DATABASE_NAME = "TracedContacts"
 const val TABLE_NAME = "Contacts"
@@ -29,6 +30,15 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 "PRIMARY KEY ( $COL_id, $COL_startTime )" +
                 ")"
         Log.i("tableCreation", dbWrite?.execSQL(createTable).toString())
+    }
+
+
+    fun deleteOldData(currentTime: Long){
+        val dbWrite = this.writableDatabase
+        val maxTimeDiff = 60000
+        val condition = "? - $COL_endTime >= $maxTimeDiff"
+        val deleted = dbWrite.delete(TABLE_NAME, condition, arrayOf(currentTime.toString()))
+        Log.i("DELETED OLD DATA", deleted.toString())
     }
 
     fun insertData(id: String, startTime: Long, endTime: Long, avgDistance: Double) {
@@ -66,13 +76,36 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
             do {
                 Log.i(
                     "ROW - >",
-                    queryResult.getString(0) + ", " + queryResult.getString(1) + ", " + queryResult.getString(
-                        2
-                    ) + ", " + queryResult.getString(3)
+                    queryResult.getString(0) + ", " +
+                            queryResult.getString(1) + ", " +
+                            queryResult.getString(2) + ", " +
+                            queryResult.getString(3)
                 )
             } while (queryResult.moveToNext())
         }
         Log.i("-------------------", "---------------------------")
+    }
+
+    fun readAllData(): String {
+        val dbRead = this.readableDatabase
+        val inspectQuery = "SELECT * FROM Contacts"
+        val result =  StringBuilder()
+        val queryResult = dbRead.rawQuery(inspectQuery, null)
+        if (queryResult.moveToFirst()) {
+            do {
+                result.append(
+                            queryResult.getString(0) + ", "
+                            + queryResult.getString(1) + ", "
+                            + queryResult.getString(2) + ", "
+                            + queryResult.getString(3)
+                )
+
+                result.append("</br>")
+
+            } while (queryResult.moveToNext())
+        }
+        return result.toString()
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
