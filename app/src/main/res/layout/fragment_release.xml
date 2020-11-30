@@ -7,29 +7,31 @@
     tools:context=".ui.ReleaseFragment">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Were you contacted by the Health Center?"
         android:textAlignment="center"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/radioGroup"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.074"
+        app:layout_constraintVertical_bias="0.576"
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="By signing below, you agree to release all data gathered by the app to the Health Center"
         android:textAlignment="center"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/releaseButton"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.442"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup"
+        app:layout_constraintVertical_bias="0.25"
         tools:ignore="HardcodedText" />
 
     <EditText
@@ -40,38 +42,39 @@
         android:inputType="text"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.628"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup"
+        app:layout_constraintVertical_bias="0.594"
         tools:ignore="Autofill,HardcodedText" />
 
     <Button
         android:id="@+id/releaseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
         android:text="Release Contact Info"
-        android:textSize="30sp"
         android:textColor="#FFFFFF"
+        android:textSize="27sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.809"
-        android:background="@drawable/custom_button"
+        app:layout_constraintTop_toBottomOf="@id/sign"
+        app:layout_constraintVertical_bias="0.728"
         tools:ignore="HardcodedText" />
 
     <RadioGroup
-        android:layout_width="146dp"
-        android:layout_height="131dp"
         android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.226">
+        app:layout_constraintVertical_bias="0.278">
 
         <RadioButton
             android:id="@+id/radioYes"

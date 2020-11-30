@@ -8,29 +8,27 @@
     android:background="#F4511E">
 
     <ImageView
+        android:id="@+id/introLogo"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:src="@drawable/info_logo"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.134"
+        app:layout_constraintVertical_bias="0.141"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="WELCOME TO GBContactTracing"
+        android:text="Welcome to GBContactTracing"
         android:textAlignment="center"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/introLogo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.036"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -39,13 +37,13 @@
         android:text="GB Contact Tracing will help Gettysburg College Combat COVID-19 and keep the community safe."
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
+        android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.413"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/introLogo"
+        app:layout_constraintVertical_bias="0.05"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -54,13 +52,13 @@
         android:text="How it works: Your device will exchange and receive Bluetooth tokens from other members of the community. These tokens are stored on your phone and cannot be accessed by anyone. Only if you test positive, the Health Authority may request you to user the release feature in the app to let them access these tokens for the purpose of contact tracing."
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
+        android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.667"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/introLogo"
+        app:layout_constraintVertical_bias="0.363"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -69,29 +67,28 @@
         android:text="Using G-COVIDWISE is completely voluntary."
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="21sp"
+        app:layout_constraintBottom_toTopOf="@id/startAppButton"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.831"
+        app:layout_constraintVertical_bias="0.944"
         tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/startAppButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Do Great Work"
-        android:textSize="18sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.958"
         android:background="@drawable/custom_button"
+        android:text="Do Great Work"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/introLogo"
+        app:layout_constraintVertical_bias="0.953"
         tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
