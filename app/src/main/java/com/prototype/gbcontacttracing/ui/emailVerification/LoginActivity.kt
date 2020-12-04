@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
-    private val code = getRandomString()
+
+    private val verificationServerEndPoint = "http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
                     "{\"id\":\"196bcd9c-23c4-11eb-adc1-0242ac120002\",\"code\":\"$code\",\"email\":\"$email\"}"
                 Log.i("requestBody", requestBody)
 
-                Fuel.post("http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php")
+                Fuel.post(verificationServerEndPoint)
                     .jsonBody(requestBody)
                     .also { println(it) }
                     .response { result ->

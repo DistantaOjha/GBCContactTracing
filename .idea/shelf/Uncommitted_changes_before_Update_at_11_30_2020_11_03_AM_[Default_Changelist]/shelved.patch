@@ -1,0 +1,268 @@
+Index: app/src/main/java/com/prototype/gbcontacttracing/databaseManager/DataBaseManager.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.prototype.gbcontacttracing.databaseManager\r\n\r\nimport android.content.ContentValues\r\nimport android.content.Context\r\nimport android.database.sqlite.SQLiteDatabase\r\nimport android.database.sqlite.SQLiteOpenHelper\r\nimport android.util.Log\r\nimport java.lang.StringBuilder\r\n\r\nconst val DATABASE_NAME = \"TracedContacts\"\r\nconst val TABLE_NAME = \"Contacts\"\r\nconst val COL_id = \"id\"\r\nconst val COL_startTime = \"startTime\"\r\nconst val COL_endTime = \"endTime\"\r\nconst val COL_avgDistance = \"avgDistance\"\r\n\r\n\r\nclass DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {\r\n\r\n    override fun onCreate(db: SQLiteDatabase?) {\r\n    }\r\n\r\n    fun setupTable() {\r\n        val dbWrite = this.writableDatabase\r\n        val createTable = \"CREATE TABLE  IF NOT EXISTS $TABLE_NAME (\" +\r\n                \"$COL_id VARCHAR(256) NOT NULL,\" +\r\n                \"$COL_startTime VARCHAR(256) NOT NULL,\" +\r\n                \"$COL_endTime VARCHAR(256) NOT NULL,\" +\r\n                \"$COL_avgDistance VARCHAR(256) NOT NULL,\" +\r\n                \"PRIMARY KEY ( $COL_id, $COL_startTime )\" +\r\n                \")\"\r\n        Log.i(\"tableCreation\", dbWrite?.execSQL(createTable).toString())\r\n    }\r\n\r\n\r\n    fun deleteOldData(currentTime: Long){\r\n        val dbWrite = this.writableDatabase\r\n        val maxTimeDiff = 60000\r\n        val condition = \"? - $COL_endTime >= $maxTimeDiff\"\r\n        val deleted = dbWrite.delete(TABLE_NAME, condition, arrayOf(currentTime.toString()))\r\n        Log.i(\"DELETED OLD DATA\", deleted.toString())\r\n    }\r\n\r\n    fun insertData(id: String, startTime: Long, endTime: Long, avgDistance: Double) {\r\n        val dbRead = this.readableDatabase\r\n        val dbWrite = this.writableDatabase\r\n\r\n        val existQuery =\r\n            \"SELECT $COL_id FROM $TABLE_NAME WHERE $COL_id = '$id' AND $COL_startTime = '$startTime'\"\r\n        val existQueryRes = dbRead.rawQuery(existQuery, null)\r\n\r\n        if (existQueryRes.count > 0) {\r\n            //update\r\n            val contentValues = ContentValues()\r\n            contentValues.put(COL_endTime, endTime)\r\n            contentValues.put(COL_avgDistance, avgDistance)\r\n\r\n            val condition = \"$COL_id = ? AND $COL_startTime = ?\"\r\n            val whereArgs = arrayOf<String>(id, startTime.toString())\r\n\r\n            Log.i(\"UPDATING\", \"$id $startTime $endTime $avgDistance\")\r\n            dbWrite.update(TABLE_NAME, contentValues, condition, whereArgs)\r\n        } else {\r\n            Log.i(\"INSERTING\", \"$id $startTime $endTime $avgDistance\")\r\n            val contentValues = ContentValues()\r\n            contentValues.put(COL_id, id)\r\n            contentValues.put(COL_startTime, startTime)\r\n            contentValues.put(COL_endTime, endTime)\r\n            contentValues.put(COL_avgDistance, avgDistance)\r\n            dbWrite.insert(TABLE_NAME, null, contentValues)\r\n        }\r\n\r\n        val inspectQuery = \"SELECT * FROM Contacts\"\r\n        val queryResult = dbRead.rawQuery(inspectQuery, null)\r\n        if (queryResult.moveToFirst()) {\r\n            do {\r\n                Log.i(\r\n                    \"ROW - >\",\r\n                    queryResult.getString(0) + \", \" +\r\n                            queryResult.getString(1) + \", \" +\r\n                            queryResult.getString(2) + \", \" +\r\n                            queryResult.getString(3)\r\n                )\r\n            } while (queryResult.moveToNext())\r\n        }\r\n        Log.i(\"-------------------\", \"---------------------------\")\r\n    }\r\n\r\n    fun readAllData(): String {\r\n        val dbRead = this.readableDatabase\r\n        val inspectQuery = \"SELECT * FROM Contacts\"\r\n        val result =  StringBuilder(\"<table>\")\r\n        val queryResult = dbRead.rawQuery(inspectQuery, null)\r\n        result.append(\"<tr>\")\r\n        result.append(\"<th>$COL_id</th>\")\r\n        result.append(\"<th>$COL_startTime</th>\")\r\n        result.append(\"<th>$COL_endTime</th>\")\r\n        result.append(\"<th>$COL_avgDistance</th>\")\r\n\r\n        result.append(\"</tr>\")\r\n\r\n        if (queryResult.moveToFirst()) {\r\n            do {\r\n                result.append(\"<tr>\")\r\n                result.append(\"<td>${queryResult.getString(0)}</td>\")\r\n                result.append(\"<td>${queryResult.getString(1)}</td>\")\r\n                result.append(\"<td>${queryResult.getString(2)}</td>\")\r\n                result.append(\"<td>${queryResult.getString(3)}</td>\")\r\n                result.append(\"</tr>\")\r\n\r\n            } while (queryResult.moveToNext())\r\n        }\r\n        result.append(\"</table>\")\r\n        return result.toString()\r\n\r\n    }\r\n\r\n    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {\r\n        //do nothing\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/prototype/gbcontacttracing/databaseManager/DataBaseManager.kt	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
++++ app/src/main/java/com/prototype/gbcontacttracing/databaseManager/DataBaseManager.kt	(date 1606750473954)
+@@ -38,7 +38,7 @@
+         val maxTimeDiff = 60000
+         val condition = "? - $COL_endTime >= $maxTimeDiff"
+         val deleted = dbWrite.delete(TABLE_NAME, condition, arrayOf(currentTime.toString()))
+-        Log.i("DELETED OLD DATA", deleted.toString())
++        //Log.i("DELETED OLD DATA", deleted.toString())
+     }
+ 
+     fun insertData(id: String, startTime: Long, endTime: Long, avgDistance: Double) {
+Index: app/src/main/res/drawable/custom_button.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<shape xmlns:android=\"http://schemas.android.com/apk/res/android\" android:shape=\"rectangle\">\r\n    <corners android:radius=\"50dp\"/>\r\n    <gradient android:startColor=\"#F4511E\" android:endColor=\"@color/colorPrimary\" android:type=\"linear\"/>\r\n</shape>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/custom_button.xml	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
++++ app/src/main/res/drawable/custom_button.xml	(date 1606185406877)
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+     <corners android:radius="50dp"/>
+-    <gradient android:startColor="#F4511E" android:endColor="@color/colorPrimary" android:type="linear"/>
++    <gradient android:startColor="#E87722" android:endColor="#002F6c" android:type="linear"/>
+ </shape>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM_[Default_Changelist]/shelved.patch	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM_[Default_Changelist]/shelved.patch	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
+@@ -1,65 +0,0 @@
+-Index: app/src/main/java/com/prototype/gbcontacttracing/bluetoothManager/BleManager.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.prototype.gbcontacttracing.bluetoothManager\r\n\r\nimport android.app.Activity\r\nimport android.bluetooth.BluetoothAdapter\r\nimport android.bluetooth.BluetoothManager\r\nimport android.bluetooth.le.*\r\nimport android.content.Context\r\nimport android.os.ParcelUuid\r\nimport android.util.Log\r\nimport com.prototype.gbcontacttracing.databaseManager.DataBaseManager\r\nimport java.util.*\r\nimport kotlin.math.pow\r\n\r\n\r\nclass BleManager {\r\n\r\n    companion object {\r\n\r\n        private const val SEND_TOKEN = \"haider\"\r\n\r\n        private lateinit var baseContext: Context\r\n        private lateinit var bluetoothManager: BluetoothManager\r\n        private lateinit var bluetoothAdapter: BluetoothAdapter\r\n        private lateinit var bleScanner: BluetoothLeScanner\r\n        private lateinit var bleAdvertiser: BluetoothLeAdvertiser\r\n        private lateinit var db: DataBaseManager\r\n        private var isScanning = false\r\n\r\n\r\n        // Keeps track of when the device was first seen\r\n        private val initTimeMap = mutableMapOf<String, Long>()\r\n\r\n        //keeps track of when the device was last seen //keeps update for every new seen\r\n        private val lastTimeMap = mutableMapOf<String, Long>()\r\n\r\n        //keeps track of distances obtained from the subsequent scans\r\n        private val distanceMap = mutableMapOf<String, List<Double>>()\r\n\r\n        // KEEP MIN_EXPOSURE_TIME < DISAPPEAR TIME\r\n        // difference between last seen time and first seen map to get into the database\r\n        private const val MIN_EXPOSURE_TIME = 15000 //in milliseconds\r\n\r\n        //difference between current time and last seen time for the device to be not in the periphery\r\n        private const val DISAPPEAR_TIME = 20000 //in milliseconds\r\n\r\n        // avg. distance to be considered the exposure\r\n        private const val MIN_EXPOSURE_DISTANCE = 6 //in feet\r\n\r\n        private val bleDataUUID =\r\n            ParcelUuid(UUID.fromString(\"00001234-0000-1000-8000-00805F9B34FB\"))\r\n\r\n        private val scanSettings = ScanSettings.Builder()\r\n            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)\r\n            .build()\r\n\r\n        private val scanCallback = object : ScanCallback() {\r\n            override fun onScanResult(callbackType: Int, result: ScanResult) {\r\n                ScanResult.DATA_COMPLETE\r\n\r\n                val serviceData =\r\n                    result.scanRecord?.getServiceData(bleDataUUID)\r\n                if (serviceData != null) {\r\n\r\n                    val token = String(serviceData)\r\n                    val distanceInFeets = 10.0.pow((-69 - (result.rssi)) / (10.0 * 2)) * 3.28084\r\n\r\n                    val time = System.currentTimeMillis()\r\n                    if (!initTimeMap.containsKey(token)) {\r\n                        initTimeMap[token] = time\r\n                        distanceMap[token] = mutableListOf(distanceInFeets)\r\n                    } else {\r\n                        lastTimeMap[token] = time\r\n                        (distanceMap[token] as MutableList<Double>?)?.add(distanceInFeets)\r\n                    }\r\n\r\n\r\n                    if (initTimeMap.containsKey(token) && lastTimeMap.containsKey(token)) {\r\n                        val exposureTime =\r\n                            initTimeMap[token]?.let { lastTimeMap[token]?.minus(it) }\r\n\r\n                        val averageDistance = distanceMap[token]?.average()\r\n\r\n                        if (exposureTime != null && averageDistance != null) {\r\n                            if (exposureTime > MIN_EXPOSURE_TIME && averageDistance < MIN_EXPOSURE_DISTANCE) {\r\n                                initTimeMap[token]?.let {\r\n                                    lastTimeMap[token]?.let { it1 ->\r\n                                        db.insertData(\r\n                                            token,\r\n                                            it,\r\n                                            it1, averageDistance\r\n                                        )\r\n                                    }\r\n                                }\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                    //Clear the ones that have disappeared\r\n                    val removedTokens = mutableListOf<String>()\r\n                    for ((canToken, lastSeenTime) in lastTimeMap) {//candidate token\r\n                        val currentTime = System.currentTimeMillis()\r\n                        if (currentTime - lastSeenTime > DISAPPEAR_TIME) {\r\n                            Log.i(\"LOST DEVICE\", canToken)\r\n                            initTimeMap.remove(canToken)\r\n                            distanceMap.remove(canToken)\r\n                            removedTokens.add(canToken)\r\n                        }\r\n                    }\r\n\r\n                    for (removedToken in removedTokens) {\r\n                        //remove from the lastTimeMap\r\n                        lastTimeMap.remove(removedToken)\r\n                    }\r\n\r\n                }\r\n            }\r\n        }\r\n\r\n        private val scanFilter = ScanFilter.Builder()\r\n            .setServiceUuid(bleDataUUID)\r\n            .build()\r\n\r\n        fun setBluetooth(activity: Activity) {\r\n            bluetoothManager =\r\n                activity.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager\r\n            bluetoothAdapter = bluetoothManager.adapter\r\n            this.bleScanner = bluetoothAdapter.bluetoothLeScanner\r\n            bleAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser\r\n        }\r\n\r\n        fun startBleScan() {\r\n            db = DataBaseManager(baseContext)\r\n            db.setupTable()\r\n            bleScanner.startScan(mutableListOf<ScanFilter>(scanFilter), scanSettings, scanCallback)\r\n            isScanning = true\r\n        }\r\n\r\n        fun stopBleScan(scanCallback: ScanCallback) {\r\n            bleScanner.stopScan(scanCallback)\r\n            isScanning = false\r\n        }\r\n\r\n        fun getBleScanner(): BluetoothLeScanner {\r\n            return bleScanner\r\n        }\r\n\r\n        fun getBleAdapter(): BluetoothAdapter {\r\n            return bluetoothAdapter\r\n        }\r\n\r\n        fun startAdvertising() {\r\n            val settings = AdvertiseSettings.Builder()\r\n                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)\r\n                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)\r\n                .setConnectable(false)\r\n                .build()\r\n\r\n            val sendData = SEND_TOKEN.toByteArray(Charsets.UTF_8)\r\n\r\n            val data = AdvertiseData.Builder()\r\n                .setIncludeDeviceName(false)\r\n                .setIncludeTxPowerLevel(false)\r\n                .addServiceUuid(bleDataUUID)\r\n                .addServiceData(bleDataUUID, sendData)\r\n                .build()\r\n\r\n            val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {\r\n                override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {\r\n                    super.onStartSuccess(settingsInEffect)\r\n                    Log.i(\"BLE\", \"LE Advertise success.\")\r\n                }\r\n\r\n                override fun onStartFailure(errorCode: Int) {\r\n                    Log.e(\"BLE\", \"Advertising onStartFailure: $errorCode\")\r\n                    super.onStartFailure(errorCode)\r\n                }\r\n            }\r\n            bleAdvertiser.startAdvertising(settings, data, advertisingCallback)\r\n        }\r\n\r\n        fun initContext(baseContext: Context?) {\r\n            if (baseContext != null) {\r\n                this.baseContext = baseContext\r\n            }\r\n        }\r\n\r\n    }\r\n\r\n\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/prototype/gbcontacttracing/bluetoothManager/BleManager.kt	(revision 85b28bdd70d2e72578bf73d86c127668dfb2da51)
+-+++ app/src/main/java/com/prototype/gbcontacttracing/bluetoothManager/BleManager.kt	(date 1605580371660)
+-@@ -57,11 +57,12 @@
+-             override fun onScanResult(callbackType: Int, result: ScanResult) {
+-                 ScanResult.DATA_COMPLETE
+- 
+--                val serviceData =
+--                    result.scanRecord?.getServiceData(bleDataUUID)
+-+//                val serviceData =
+-+//                    result.scanRecord?.getServiceData(bleDataUUID)
+-+                val serviceData = result.device.name as String
+-                 if (serviceData != null) {
+- 
+--                    val token = String(serviceData)
+-+                    val token = serviceData
+-                     val distanceInFeets = 10.0.pow((-69 - (result.rssi)) / (10.0 * 2)) * 3.28084
+- 
+-                     val time = System.currentTimeMillis()
+-@@ -149,19 +150,22 @@
+-         }
+- 
+-         fun startAdvertising() {
+-+
+-+            bluetoothAdapter.name = SEND_TOKEN
+-+
+-             val settings = AdvertiseSettings.Builder()
+-                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
+--                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+-+                //.setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+-                 .setConnectable(false)
+-                 .build()
+- 
+-             val sendData = SEND_TOKEN.toByteArray(Charsets.UTF_8)
+- 
+-             val data = AdvertiseData.Builder()
+--                .setIncludeDeviceName(false)
+-+                .setIncludeDeviceName(true)
+-                 .setIncludeTxPowerLevel(false)
+-                 .addServiceUuid(bleDataUUID)
+--                .addServiceData(bleDataUUID, sendData)
+-+                //.addServiceData(bleDataUUID, sendData)
+-                 .build()
+- 
+-             val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
+-Index: app/src/main/java/com/prototype/gbcontacttracing/databaseManager/Contact.kt
+-===================================================================
+---- app/src/main/java/com/prototype/gbcontacttracing/databaseManager/Contact.kt	(revision 85b28bdd70d2e72578bf73d86c127668dfb2da51)
+-+++ app/src/main/java/com/prototype/gbcontacttracing/databaseManager/Contact.kt	(revision 85b28bdd70d2e72578bf73d86c127668dfb2da51)
+-@@ -1,8 +0,0 @@
+--package com.prototype.gbcontacttracing.databaseManager
+--
+--class Contact {
+--
+--
+--
+--
+--}
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM__Default_Changelist_.xml	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM__Default_Changelist_.xml	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM_[Default_Changelist]" date="1605584200837" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 11/16/2020 10:36 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM__Default_Changelist_.xml	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM__Default_Changelist_.xml	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM_[Default_Changelist]" date="1605581126023" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_9_45_PM_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 11/16/2020 9:45 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM_[Default_Changelist]/shelved.patch	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
++++ .idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2020_10_36_PM_[Default_Changelist]/shelved.patch	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
+@@ -1,122 +0,0 @@
+-Index: app/src/main/java/com/prototype/gbcontacttracing/VerifyActivity.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.prototype.gbcontacttracing\r\n\r\nimport android.content.Intent\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport android.widget.Toast\r\nimport kotlinx.android.synthetic.main.activity_age.*\r\nimport kotlinx.android.synthetic.main.activity_verify.*\r\n\r\nclass VerifyActivity : AppCompatActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_verify)\r\n\r\n        submitButton.setOnClickListener{\r\n            if(verification(codeBox.text.toString())){\r\n                val intent = Intent(this, IntroActivity::class.java)\r\n                startActivity(intent)\r\n            }\r\n            else {\r\n                Toast.makeText(this, \"Invalid Code, Try Again!\", Toast.LENGTH_LONG).show()\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun verification(input:String) : Boolean {\r\n        if(input == intent.getStringExtra(\"Code\").toString()){\r\n            return true\r\n        }\r\n        return false\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/prototype/gbcontacttracing/VerifyActivity.kt	(revision 95870e0aa5147db0900b4f31d71b679421dcbb6e)
+-+++ app/src/main/java/com/prototype/gbcontacttracing/VerifyActivity.kt	(date 1605581999388)
+-@@ -17,16 +17,16 @@
+-                 val intent = Intent(this, IntroActivity::class.java)
+-                 startActivity(intent)
+-             }
+--            else {
+--                Toast.makeText(this, "Invalid Code, Try Again!", Toast.LENGTH_LONG).show()
+--            }
+-+//            else {
+-+//                Toast.makeText(this, "Invalid Code, Try Again!", Toast.LENGTH_LONG).show()
+-+//            }
+-         }
+-     }
+- 
+-     private fun verification(input:String) : Boolean {
+--        if(input == intent.getStringExtra("Code").toString()){
+--            return true
+--        }
+--        return false
+-+//        if(input == intent.getStringExtra("Code").toString()){
+-+//            return true
+-+//        }
+-+        return true
+-     }
+- }
+-\ No newline at end of file
+-Index: app/src/main/java/com/prototype/gbcontacttracing/LoginActivity.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.prototype.gbcontacttracing\r\n\r\nimport android.content.Intent\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport android.util.Patterns\r\nimport android.widget.EditText\r\nimport kotlinx.android.synthetic.main.activity_login.*\r\nimport java.io.BufferedReader\r\nimport java.io.InputStreamReader\r\nimport java.io.OutputStreamWriter\r\nimport java.net.HttpURLConnection\r\nimport java.net.URL\r\nimport java.net.URLEncoder\r\n\r\nclass LoginActivity : AppCompatActivity() {\r\n\r\n    private val code = getRandomString()\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_login)\r\n        loginVerifyButton.setOnClickListener{\r\n            if(validEmailAddress(emailBox)) {\r\n                val email = emailBox.text.toString()\r\n                sendPostRequest(this.code, email)\r\n                val intent = Intent(this, VerifyActivity::class.java)\r\n                intent.putExtra(\"Code\", code)\r\n                startActivity(intent)\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun validEmailAddress(emailBox: EditText?): Boolean {\r\n        val email = emailBox?.text.toString()\r\n        return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()\r\n    }\r\n\r\n    private fun sendPostRequest(password:String, email:String) {\r\n\r\n        var reqParam = URLEncoder.encode(\"id\", \"UTF-8\") + \"=\" + URLEncoder.encode(\"196bcd9c-23c4-11eb-adc1-0242ac120002\", \"UTF-8\")\r\n        reqParam += \"&\" + URLEncoder.encode(\"code\", \"UTF-8\") + \"=\" + URLEncoder.encode(password, \"UTF-8\")\r\n        reqParam += \"&\" + URLEncoder.encode(\"email\", \"UTF-8\") + \"=\" + URLEncoder.encode(email, \"UTF-8\")\r\n        val mURL = URL(\"http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php\")\r\n\r\n        with(mURL.openConnection() as HttpURLConnection) {\r\n            requestMethod = \"POST\"\r\n\r\n            val wr = OutputStreamWriter(outputStream)\r\n            wr.write(reqParam)\r\n            wr.flush()\r\n\r\n            println(\"URL : $url\")\r\n            println(\"Response Code : $responseCode\")\r\n\r\n            BufferedReader(InputStreamReader(inputStream)).use {\r\n                val response = StringBuffer()\r\n\r\n                var inputLine = it.readLine()\r\n                while (inputLine != null) {\r\n                    response.append(inputLine)\r\n                    inputLine = it.readLine()\r\n                }\r\n                println(\"Response : $response\")\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun getRandomString() : String {\r\n        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')\r\n        return (1..5)\r\n            .map { allowedChars.random() }\r\n            .joinToString(\"\")\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/prototype/gbcontacttracing/LoginActivity.kt	(revision 95870e0aa5147db0900b4f31d71b679421dcbb6e)
+-+++ app/src/main/java/com/prototype/gbcontacttracing/LoginActivity.kt	(date 1605581816496)
+-@@ -22,10 +22,10 @@
+-         setContentView(R.layout.activity_login)
+-         loginVerifyButton.setOnClickListener{
+-             if(validEmailAddress(emailBox)) {
+--                val email = emailBox.text.toString()
+--                sendPostRequest(this.code, email)
+-+//                val email = emailBox.text.toString()
+-+//                sendPostRequest(this.code, email)
+-                 val intent = Intent(this, VerifyActivity::class.java)
+--                intent.putExtra("Code", code)
+-+//                intent.putExtra("Code", code)
+-                 startActivity(intent)
+-             }
+-         }
+-@@ -36,35 +36,35 @@
+-         return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+-     }
+- 
+--    private fun sendPostRequest(password:String, email:String) {
+--
+--        var reqParam = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode("196bcd9c-23c4-11eb-adc1-0242ac120002", "UTF-8")
+--        reqParam += "&" + URLEncoder.encode("code", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8")
+--        reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
+--        val mURL = URL("http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php")
+--
+--        with(mURL.openConnection() as HttpURLConnection) {
+--            requestMethod = "POST"
+--
+--            val wr = OutputStreamWriter(outputStream)
+--            wr.write(reqParam)
+--            wr.flush()
+--
+--            println("URL : $url")
+--            println("Response Code : $responseCode")
+--
+--            BufferedReader(InputStreamReader(inputStream)).use {
+--                val response = StringBuffer()
+--
+--                var inputLine = it.readLine()
+--                while (inputLine != null) {
+--                    response.append(inputLine)
+--                    inputLine = it.readLine()
+--                }
+--                println("Response : $response")
+--            }
+--        }
+--    }
+-+//    private fun sendPostRequest(password:String, email:String) {
+-+//
+-+//        var reqParam = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode("196bcd9c-23c4-11eb-adc1-0242ac120002", "UTF-8")
+-+//        reqParam += "&" + URLEncoder.encode("code", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8")
+-+//        reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
+-+//        val mURL = URL("http://p4pproto.sites.gettysburg.edu/GBContactTracing/verify.php")
+-+//
+-+//        with(mURL.openConnection() as HttpURLConnection) {
+-+//            requestMethod = "POST"
+-+//
+-+//            val wr = OutputStreamWriter(outputStream)
+-+//            wr.write(reqParam)
+-+//            wr.flush()
+-+//
+-+//            println("URL : $url")
+-+//            println("Response Code : $responseCode")
+-+//
+-+//            BufferedReader(InputStreamReader(inputStream)).use {
+-+//                val response = StringBuffer()
+-+//
+-+//                var inputLine = it.readLine()
+-+//                while (inputLine != null) {
+-+//                    response.append(inputLine)
+-+//                    inputLine = it.readLine()
+-+//                }
+-+//                println("Response : $response")
+-+//            }
+-+//        }
+-+//    }
+- 
+-     private fun getRandomString() : String {
+-         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+Index: app/src/main/java/com/prototype/gbcontacttracing/ui/InfoFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.prototype.gbcontacttracing.ui\r\n\r\nimport android.os.Bundle\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport androidx.fragment.app.Fragment\r\nimport com.prototype.gbcontacttracing.R\r\n\r\nclass InfoFragment : Fragment() {\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        return inflater.inflate(R.layout.fragment_info, container, false)\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/prototype/gbcontacttracing/ui/InfoFragment.kt	(revision 372ec0c7bd342ea4dd8134f7e451c7a53401d669)
++++ app/src/main/java/com/prototype/gbcontacttracing/ui/InfoFragment.kt	(date 1606185967833)
+@@ -15,4 +15,5 @@
+     ): View? {
+         return inflater.inflate(R.layout.fragment_info, container, false)
+     }
++    //"Helvetica Neue"
+ }
+\ No newline at end of file

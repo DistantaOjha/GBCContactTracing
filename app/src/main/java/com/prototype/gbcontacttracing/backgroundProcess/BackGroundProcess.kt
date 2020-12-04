@@ -7,13 +7,15 @@ import android.widget.Toast
 import com.prototype.gbcontacttracing.MainActivity
 import com.prototype.gbcontacttracing.bluetoothManager.BleManager
 
-
+/**
+ * This class included initiation for background services which has SQLite operations and BLE operations
+ */
 class BackGroundProcess : Service() {
 
 
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
-
+    //static
     companion object {
         @JvmField
         var isAppInForeground: Boolean = false
@@ -93,7 +95,7 @@ class BackGroundProcess : Service() {
         isAppInForeground = false
     }
 
-
+    //show notification that there's service running in the background
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(

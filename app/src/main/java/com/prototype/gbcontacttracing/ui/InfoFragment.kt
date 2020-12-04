@@ -15,4 +15,5 @@ class InfoFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_info, container, false)
     }
+    //"Helvetica Neue"
 }

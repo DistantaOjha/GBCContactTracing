@@ -5,7 +5,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import java.lang.StringBuilder
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val DATABASE_NAME = "TracedContacts"
 const val TABLE_NAME = "Contacts"
@@ -33,12 +35,11 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
 
-    fun deleteOldData(currentTime: Long){
+    fun deleteOldData(currentTime: Long, maxTimeDiff: Long){
         val dbWrite = this.writableDatabase
-        val maxTimeDiff = 60000
         val condition = "? - $COL_endTime >= $maxTimeDiff"
         val deleted = dbWrite.delete(TABLE_NAME, condition, arrayOf(currentTime.toString()))
-        Log.i("DELETED OLD DATA", deleted.toString())
+        //Log.i("DELETED OLD DATA", deleted.toString())
     }
 
     fun insertData(id: String, startTime: Long, endTime: Long, avgDistance: Double) {
@@ -95,16 +96,21 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         result.append("<th>$COL_id</th>")
         result.append("<th>$COL_startTime</th>")
         result.append("<th>$COL_endTime</th>")
+        result.append("<th>Duration(min)</th>")
         result.append("<th>$COL_avgDistance</th>")
 
         result.append("</tr>")
-
+        val dateFormat = "dd/MM/yyyy hh:mm:ss.SSS"
         if (queryResult.moveToFirst()) {
             do {
                 result.append("<tr>")
                 result.append("<td>${queryResult.getString(0)}</td>")
-                result.append("<td>${queryResult.getString(1)}</td>")
-                result.append("<td>${queryResult.getString(2)}</td>")
+                result.append("<td>${getDate(queryResult.getString(1), dateFormat)}</td>")
+                result.append("<td>${getDate(queryResult.getString(2), dateFormat)}</td>")
+
+                var duration = queryResult.getString(2).toLong() - queryResult.getString(1).toLong() //in milliseconds
+                duration /= (60 * 1000) //convert to minutes
+                result.append("<td>${duration}</td>")
                 result.append("<td>${queryResult.getString(3)}</td>")
                 result.append("</tr>")
 
@@ -114,6 +120,17 @@ class DataBaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         return result.toString()
 
     }
+
+    private fun getDate(milliSeconds: String, dateFormat: String?): String? {
+        // Create a DateFormatter object for displaying date in specified format.
+        val formatter: DateFormat = SimpleDateFormat(dateFormat)
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = milliSeconds.toLong()
+        return formatter.format(calendar.time)
+    }
+
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         //do nothing

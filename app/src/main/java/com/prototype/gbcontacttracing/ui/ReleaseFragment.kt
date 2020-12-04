@@ -17,6 +17,7 @@ import com.prototype.gbcontacttracing.databaseManager.DataBaseManager
 
 class ReleaseFragment : Fragment() {
 
+    private val releaseServerEndpoint = "http://p4pproto.sites.gettysburg.edu/GBContactTracing/release.php"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -114,7 +115,7 @@ class ReleaseFragment : Fragment() {
 
             Log.i("requestBody", requestBody)
 
-            Fuel.post("http://p4pproto.sites.gettysburg.edu/GBContactTracing/release.php")
+            Fuel.post(releaseServerEndpoint)
                 .jsonBody(requestBody)
                 .also { println(it) }
                 .response { result ->
