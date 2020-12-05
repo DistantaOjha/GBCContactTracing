@@ -16,12 +16,12 @@ The application implements Bluetooth Low Energy (BLE) technology to broadcast co
 | startTime   | First time the device was seen. |
 | endTime   | End time the device was seen. |
 | avgDistance   | Average distance over the interaction. |
-\
-The SQLite database has one table that captures this exact information. Following is the specification: \
-\
+
+The SQLite database has one table that captures this exact information. Following is the specification: 
+
 Database name: **TracedContacts**
 Table Name: **Contacts**
-\
+
 | id | starTime | endTime| avgDistance
 | ----------- | ----------- | ----------- |  ----------- |
 | example@email.com |  1607125639912 |  1607125739912 | 3 |
@@ -34,18 +34,17 @@ File : **gbcontacttracing.bluetoothManager**
 
 | Field      | Description |
 | ----------- | ----------- |
-| MIN_EXPOSURE_TIME      | Minimum time for an interaction to be considered as sufficient exposure. |
+| MIN_EXPOSURE_TIME | Minimum time for an interaction to be considered as sufficient exposure. |
 | DISAPPEAR_TIME   | Minimum time of dissappearnce of a device to be counted as end of interaction. |
 | MAX_TIME_DIFF   | Time for which if the difference of endTime and current time is greater than this then the exposure record is deleted from the database. |
 | MIN_EXPOSURE_DISTANCE   | Minimum distance for an interaction to be considered as sufficient exposure* |
 
-\
-*It is important to note that even if the average distance at the end of interaction is greater than **MIN_EXPOSURE_DISTANCE**, if there's any situation where average interaction distance is less than **MIN_EXPOSURE_DISTANCE** after **MIN_EXPOSURE_TIME** has passed, then the interaction will still be counted as an exposure.
+_*It is important to note that even if the average distance at the end of interaction is greater than **MIN_EXPOSURE_DISTANCE**, if there's any situation where average interaction distance is less than **MIN_EXPOSURE_DISTANCE** after **MIN_EXPOSURE_TIME** has passed, then the interaction will still be counted as an exposure._
 
 The application also has a server but it merely accepts post request from the application in order to send the respective infromation. The server has the following end points:
 
 | End Points   | File  | Description |
 | ----------- | -----------|----------- |
-| verificationServerEndPoint | LoginActivity.kt | php endpoint that accepts post request to send a verification email.* |
-| releaseServerEndpoint | ReleaseFragment.kt | php endpoint that accepts post request to send data to authority.* |
+| verificationServerEndPoint | LoginActivity.kt | php endpoint that accepts post request to send a verification email. |
+| releaseServerEndpoint | ReleaseFragment.kt | php endpoint that accepts post request to send data to authority. |
 
