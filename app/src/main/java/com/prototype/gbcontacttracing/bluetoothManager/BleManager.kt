@@ -45,7 +45,7 @@ class BleManager {
         private const val DISAPPEAR_TIME = 20000 //in milliseconds
 
         // if the difference between end time of the data and current time is less than this time then delete that record from the database
-        private const val maxTimeDiff: Long = 120000
+        private const val MAX_TIME_DIFF: Long = 120000
 
         // avg. distance to be considered the exposure
         private const val MIN_EXPOSURE_DISTANCE = 6 //in feet
@@ -126,7 +126,7 @@ class BleManager {
                 }
 
                 //delete the data if there exist anything older than specified time
-                db.deleteOldData(System.currentTimeMillis(), maxTimeDiff)
+                db.deleteOldData(System.currentTimeMillis(), MAX_TIME_DIFF)
             }
 
         }
