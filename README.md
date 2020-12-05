@@ -1,7 +1,6 @@
 # GBCContactTracing
 
 This project is protoype android application for COVID-19 contact tracing in Gettysburg College and a part of CS440 course in Gettysburg College. 
-\
 
 **API level: 26 \
 Compile SDK version: 30**
@@ -15,7 +14,7 @@ The application implements Bluetooth Low Energy (BLE) technology to broadcast co
 | token      | College email. |
 | startTime   | First time the device was seen. |
 | endTime   | End time the device was seen. |
-| avgDistance   | Average distance over the interaction. |
+| avgDistance   | Average distance over the interaction in feet. |
 
 The SQLite database has one table that captures this exact information. Following is the specification: 
 
